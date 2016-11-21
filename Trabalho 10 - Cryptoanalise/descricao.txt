@@ -1,0 +1,47 @@
+Trabalho 10 - Entregar até dia 25/11
+
+Mini-programa de cryptoanálise da Banana.
+
+Palavra Chave: B A N A N A
+
+Matriz para deslocamento
+B 	A 	N 	A 	N 	A
+A 	B 	A 	N 	A 	N
+N 	A 	B 	A 	N 	A
+A 	N 	A 	B 	A 	N
+N 	A 	N 	A 	B 	A
+A 	N 	A 	N 	A 	B
+
+Ordenar as Linhas
+1 	A 	B 	A 	N 	A 	N
+2 	A 	N 	A 	B 	A 	N
+3 	A 	N 	A 	N 	A 	B
+4 	B 	A 	N 	A 	N 	A
+5 	N 	A 	B 	A 	N 	A
+6 	N 	A 	N 	A 	B 	A
+
+Para facilitar o argumento será a última coluna.
+
+Implementar a função que recebe um arquivo com diversas strings e realiza a descrypto_analise de cada uma das strings.
+
+Exemplo:  char * descrypto_analise ("NNBAAA",4)
+
+ Outro Exemplo com a palavra:  P E T R A
+
+Matriz com deslocamento
+P 	E 	T 	R 	A
+A 	P 	E 	T 	R
+R 	A 	P 	E 	T
+T 	R 	A 	P 	E
+E 	T 	R 	A 	P
+
+Matriz Ordenada
+1 	A 	P 	E 	T 	R
+2 	E 	T 	R 	A 	P
+3 	P 	E 	T 	R 	A
+4 	R 	A 	P 	E 	T
+5 	T 	R 	A 	P 	E
+
+Para facilitar o argumento será a última coluna.
+
+Exemplo2:  char * descrypto_analise ("RPATE",3)

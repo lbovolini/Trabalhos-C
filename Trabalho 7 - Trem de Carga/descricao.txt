@@ -1,0 +1,11 @@
+Trabalho 7 - Entregar até 04/11
+
+Um trem de carga (soja) leva vagões com no máximo 40 toneladas de carga cada um. Cada vez que uma nova quantidade de carga deve ser inserida, é verificado se o último vagão tem ainda lugar vago, se não possuir, a companhia adiciona mais um vagão. Quando o trem chegar a uma estação, uma certa quantidade de carga é retirada a partir do ultimo vagão. Se a quantidade de carga retirada esvazia o vagão, ele é retirado do trem. Implemente:
+
+        Definição das estruturas de dados para representar o problema;
+        Programa para simular a chegada do trem em uma estação e possibilite a carregamento ou descarregamento da carga.
+        Função para mostrar o número de vagões e sua carga;
+
+        Função recursiva de inserção de carga;
+
+        Função recursiva de retirada de carga;

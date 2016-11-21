@@ -1,0 +1,39 @@
+Trabalho 1 - Entrega até 23/08
+
+Escreva um programa que armazene um agenda telefônica com no máximo 30 entradas (#define MAX 30). Esta agenda tem um tipo estruturado com os seguintes campos:
+
+    apelido ( char 10)
+
+    nome ( char 30)
+
+    telefone ( char 12)
+
+    idade (int)
+
+Obrigatoriamente deverá existir as seguintes funções:
+
+    Função inicializa_agenda (struct agenda a[MAX]); Deve setar o campo idade dos MAX elementos do vetor com o valor -1, significando que os elementos da agenda A estão disponíveis.
+
+    Função inclui_agenda (struct agenda a[MAX], char apelido[10], char nome[30], char telefone[12], int idade); Localizar um elemeto do vetor A que possua idade = -1 e incluir os valores. Deve retornar 1 se incluir e 0 se não incluir devido duplicação do apelido.
+
+    Função ordena_apelido ( struct agenda a[MAX], int ind_apelido[MAX]);
+        ind_apelido é um vetor auxiliar e este vetor que deve ser ordenado, não deve ser alterado o vetor agenda A. Esta função pode ser executada após a inclusão de um novo elemento, para deixar o ind_apelido sempre atualizado;
+
+    Função busca_telefone_por_apelido ( struct agenda a[MAX], int ind_apelido[MAX], char apelido[10]); Deve retornar o numero do telefone ou valor -1 se não encontrado.
+    Função exclui_agenda (struct agenda a[MAX], char apelido[10]) coloca o valor da idade deste apelido com valor -1, se existir.
+
+
+
+Trabalho 2 - Entrega até 30/08
+
+De acordo com as estruturas do programa agenda, realizado no Trabalho 1. Escrevas as duas funções de manipulação de arquivos:  
+
+    gravar os dados da agenda em um arquivo;
+    ler os dados de um arquivo para os vetores da agenda.
+
+Notas:
+
+    Com objetivo de treinar ponteiros e aritmética de ponteiros, será proibido a utilização de "[" e "]" no corpo do programa, só pode ser utilizado os colchetes para declaração de variáveis;
+    Sugiro a criação de ponteiros para as estruturas utilizadas, por exemplo: struct agenda *pa;
+    Não é necessário criação de arquivo para o índice apelido.
+

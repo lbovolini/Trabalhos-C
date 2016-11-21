@@ -1,0 +1,64 @@
+Trabalho 3 - Entrega até 13/09
+
+Representar polinômios por meio de um vetor de float com no máximo 10 elementos. Onde expoente do polinómio é representado pelo índice do vetor e o coeficiente é o numero (float) armazenado no vetor. Os polinômios (no máximo 2) devem ser lidos de um arquivo chamado “p-input.txt” em forma de String. Exemplo: P(x) = 3x5 + 2x – 1, será armazenado no arquivo como 3x5+2x-1.
+
+Não será permitido a utilização de variáveis globais, exceto os vetores P e Q.
+
+Não será permitido a utilização de "[" e "]" no corpo do programa, só pode ser utilizado os colchetes para declaração de variáveis;
+
+Devem ser implementados as seguintes funções:
+
+    Inicializar os vetores de polinômio;
+
+    Carregar os vetores de polinômio;
+
+    Efetuar as operações:
+
+        Soma de polinômios
+
+        Subtração de polinômios
+
+        Derivada de polinômios
+
+        Integral de polinômios
+        Avaliar o valor do polinômio a partir de um valor “x” fornecido pelo arquivo de entrada.
+
+Todos os resultados devem ser exibidos na tela e armazenados em um arquivo chamado “p-output.txt”
+
+Formato dos arquivo “p-input.txt”
+
+P=3x5+2x-1
+
+Q=4x9-3x3+1
+
+x=2.3
+
+Formato dos arquivo “p-output.txt”
+
+P=3x5+2x-1
+
+Q=4x9-3x3+1
+
+x=2.3
+
+P(2.3)=.....
+
+Q(2.3)=....
+
+Soma P+Q= …...
+
+Soma(2.3)=...
+
+Subtracao P-Q=......
+
+Subtracao(2.3)=....
+
+Derivada Q=......
+
+Derivada Q(2.3)=....
+
+Integral P=.....
+
+Integral P(2.3)=...
+
+Fim

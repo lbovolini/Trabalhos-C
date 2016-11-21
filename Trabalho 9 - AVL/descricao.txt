@@ -1,0 +1,17 @@
+Trabalho 9 - Entrega no dia 18/11
+
+Projetar e implementar um programa para ler os dados de um arquivo chamado "dados.txt" e criar uma árvore balanceada utilizando as técnicas de AVL (https://pt.wikipedia.org/wiki/Árvore_AVL).
+
+Importante: ao final da carga do arquivo de operações a árvore deve ser apresentada na tela e deve permitir a interação com o usuário para a inclusão e exclusão de nodos até que que usuário encerre o programa.
+
+Formato dos Arquivo "dados.txt" será composto por: operação (+ inclusão e - remoção), valor (qualquer numero inteiro entre -1000 a 1000). 
+
+Exemplo
+
++,50
+
++,23
+
++,-12
+
+-,23

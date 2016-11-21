@@ -1,0 +1,34 @@
+Trabalho 8 - Entrega no dia 11/11
+Utilizando os conceitos e funções do Trabalho 5, implementar operações sobre a primeira matriz para efetuar cálculos similares a uma planilha eletrônica.
+
+Algumas considerações:
+
+    A matriz inicial deverá ser carregada no mesmo formato do trabalho 4, sendo do arquivo (matrizes.txt) e que possui o seguinte formato.
+    As colunas da matriz serão nominadas de A, B, C, D, ... , Z
+    As operações a serem executas estarão armazenadas no arquivo (operacao.txt) e possuirão o seguinte formato:
+
+A1=(B1+C1)*(B2/C1)
+
+A2=A1^A2  // elevar a célula A1 a potência da célula A2
+
+C3=(C3-C3)*((A2)^2)
+
+Funções a serem implementadas
+
+    Inserir elemento de forma ordenado: esta função irá inserir um elemento na lista de forma ordenada;
+    Alterar valor do elemento:  esta função irá alterar o valor do elemento conforme o cálculo realizado.
+    Remover elemento: sempre o resultado de uma operação resultar valor zero o elemento deverá ser removido da lista caso exista. 
+    Ler as operações de cálculo do arquivo (operacao.txt) e processar a sua execução.
+
+Operações
+
+    - (Diferença)
+    + (Adição)
+    * (Multiplicação)
+    / (Divisão)
+    ^ (Potência)
+    ( ) (Altera a precedência de calculo) 
+
+Resultado
+
+Como resultado deverá ser exibido na tela a matriz resultante das operações e armazenadas num arquivo chamado (resultado.txt).

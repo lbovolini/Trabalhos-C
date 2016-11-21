@@ -1,0 +1,71 @@
+Trabalho 6 - Entregar até 11/10
+
+Pouca Paciência
+
+Projetar e implementar em um Mini Jogo de Pouca Paciência (MJPP). Devem ser implementadas estruturas de dados, como: listas, pilhas e listas circulares. As seguintes regras de funcionamento do MJPP deverão ser respeitadas:
+
+Configuração inicial e regras de empilhamento:
+
+    Um único baralho de 40 cartas é utilizado (as cartas podem ser identificada por siglas de dois caracteres, o primeiro indicando o valor – 0, 1, 2, 3, ..., 9 - e o segundo indicando os naipes - E, C, P, O. Assim, a cadeia de caracteres "5C", por exemplo, representaria carta 5 de copas).
+
+    Existem 4 pilhas de naipe inicialmente vazias onde cartas do mesmo naipe devem ser empilhadas, em sequência ascendente (iniciando com o ZERO e fechando com o NOVE).
+
+    Existem 7 pilhas de fileira que iniciam na seguinte configuração: 1 carta na primeira pilha, 2 na segunda, 3 na terceira, ..., 7 na sétima. Apenas a carta no topo da pilha de fileira é inicialmente virada para cima (as outras ficam viradas para baixo). As cartas devem ser empilhadas, em cada pilha de fileira, em seqüência descendente, com cartas de naipe espada ou paus (pretos) intercaladas com cartas de naipe copas e ouro (vermelhas). Sempre deve existir uma carta virada para cima em cada pilha de fileira.
+
+    Existe uma lista circular duplamente encadeada de estoque, inicialmente contendo todas as cartas que não foram colocadas nas pilhas de fileira (viradas para baixo).
+
+Movimentos possíveis e objetivo do jogo:
+
+    Consultar a uma carta da lista circular duplamente encadeada de estoque, uma por vez, e se possível empilha-las nas pilhas de naipe ou fileira.
+
+    Retirar 1 carta virada para cima no topo de uma pilha de fileira e empilha-la em uma pilha de naipes.
+
+    Retirar 1 carta que estejam virada para cima em uma pilha de fileira e transporta-la para uma outra fileira. (este movimento pode virar a carta do novo topo).
+
+    Objetivo do jogo: empilhar todas as cartas nas pilhas de naipe.
+
+Sugestões de Estruturas de Dados:
+
+struct st_elemento{
+
+int valor;
+
+char naipe;
+
+};
+
+struct st_lista_circular {
+
+int visivel; // campo para definir se o elemento deve ficar visível ou não
+
+struct st_elemento carta;
+
+struct st_lista_circular *ant, *prox;
+
+};
+
+struct st_pilha {
+
+struct st_elemento carta;
+
+int visivel; // campo para definir se o elemento deve ficar visível ou não
+
+struct st_pilha *prox;
+
+};
+
+typedef struct{
+
+int n; // numero de elementos da lista
+
+st_lista_circular *prim, *ult;
+
+} tipo_descritor_lista;
+
+typedef struct{
+
+int n; // numero de elementos da pilha
+
+st_pilha *topo;
+
+} tipo_descritor_pilha;

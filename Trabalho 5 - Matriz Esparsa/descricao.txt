@@ -1,0 +1,93 @@
+Trabalho 4 - Entrega até 20/09
+
+Matriz Esparsa
+
+Matrizes esparsas são matrizes nas quais a maioria das posições são preenchidas por zeros. Para estas matrizes, podemos economizar um espaço significativo de memória se apenas os termos diferentes de zero forem armazenados. As operações usuais sobre estas matrizes (somar, multiplicar e inverter) também podem ser feitas em tempo muito menor se não armazenarmos as posições que contém zeros. Uma maneira eficiente de representar estruturas com tamanho variável e/ou desconhecido é através de alocação encadeada, utilizando listas. Vamos usar esta representação para armazenar as matrizes esparsas.
+
+typedef struct st_celula{
+
+  struct st_celula *prox;
+
+  int lin, col;
+
+  float val;
+
+}tipo_celula;
+
+typedef struct{
+
+  int i, j;
+
+  tipo_celula *prim_celula, *ult_celula;
+
+} tipo_matriz_esparsa;
+
+typedef tipo_matriz_esparsa matriz_esparsa;
+
+Funções a serem criadas:
+
+    matriz_esparsa *cria_matriz_esparsa ( int i, int j );
+
+    int insere(matriz_esparsa *mat, int linha, int coluna, float valor);
+
+    int imprimeMatriz(matriz_esparsa *mat);
+
+    int apagaMatriz(matriz_esparsa *mat);
+
+    matriz_esparsa *somaMatriz(matriz_esparsa *matA, matriz_esparsa *matB);
+
+    matriz_esparsa *multiplicaMatriz(matriz_esparsa *matA, matriz_esparsa *matB);
+
+    float valorElemento(matriz_esparsa *mat, int linha, int coluna); // se elemento não encontrado retornar Zero
+
+Operações a serem implementadas:
+
+    Ler as duas matrizes de um arquivo chamado (matrizes.txt) que possui o seguinte formato:
+
+Matriz 3 4 // matriz com 3 linhas e 4 colunas
+
+1 2 5.3 // elemento M(1,2)=5.3
+
+3 3 3.7 // elemento M(3,3)=3.7
+
+Matriz 4 3 // matriz com 4 linhas e 3 colunas
+
+2 3 6.7 // elemento M(2,3)=6,7
+
+3 1 7.7 // elemento M(3,1)=7.7
+
+Fim
+
+    Armazenar as matrizes esparsas em uma lista encadeada de elementos e um descritor do tipo_matriz_esparsa;
+
+    Realizar a operações de soma e multiplicação das matrizes, mostrar na tela as matrizes originais e os resultados (soma e multiplicação), bem como armazenar em arquivo chamado (output.txt) as matrizes que foram lidas, soma e multiplicação, no mesmo formato do arquivo de entrada.
+
+
+Trabalho 5 - Entrega no dia 27/09
+
+Utilizando os conceitos e funções do Trabalho 4, implementar operações sobre a primeira matriz para efetuar cálculos similares a uma planilha eletrônica.
+
+Algumas considerações:
+
+    A matriz inicial deverá ser carregada no mesmo formato do trabalho 4, sendo do arquivo (matrizes.txt) e que possui o seguinte formato.
+    As colunas da matriz serão nominadas de A, B, C, D, ... , Z
+    As operações a serem executas estarão armazenadas no arquivo (operacao.txt) e possuirão o seguinte formato:
+
+A1=B1+C1 
+
+C2=B2/C1
+
+A2=A1*A2
+
+C3=C3-C3
+
+Funções a serem implementadas
+
+    Inserir elemento de forma ordenado: esta função irá inserir um elemento na lista de forma ordenada;
+    Alterar valor do elemento:  esta função irá alterar o valor do elemento conforme o cálculo realizado.
+    Remover elemento: sempre o resultado de uma operação resultar valor zero o elemento deverá ser removido da lista caso exista. 
+    Ler as operações de cálculo do arquivo (operacao.txt) e processar a sua execução.
+
+Resultado
+
+Como resultado deverá ser exibido na tela a matriz resultante das operações e armazenadas num arquivo chamado (resultado.txt).
