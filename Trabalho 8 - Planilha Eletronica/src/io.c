@@ -148,6 +148,12 @@ char *load_file_memory (char *file_name)
     file_size = ftell (file);
     rewind (file);
 
+    // empty file
+    if (file_size <= 0) {
+        printf("File %s is empty.\n", file_name);
+        exit (EXIT_FAILURE);
+    }
+
     // allocate memory to file
     buffer_file = (char *) malloc (sizeof (char) * file_size);
     if (!buffer_file) {
@@ -190,8 +196,9 @@ void ler_operacoes(tipo_descritor_lista *expressao)
     }
 */
     char *buffer_file = NULL;
+    char *file_name = "operacao.txt";
 
-    buffer_file = load_file_memory ("operacao.txt");
+    buffer_file = load_file_memory (file_name);
 
     printf("%s\n", buffer_file);
 
