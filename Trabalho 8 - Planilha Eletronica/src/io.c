@@ -133,10 +133,45 @@ int ler_arquivo(matriz_esparsa **matriz1, matriz_esparsa **matriz2)
 }
 
 
+// carrega arquivo para a memoria e retorna
+char *load_file_memory (char *file_name)
+{
+    FILE *file = NULL;
+    char *buffer_file = NULL;
+    long file_size = 0;
+    size_t result = 0;
+
+    file = fopen(file_name, "r");
+
+    // obtain file size
+    fseek (file, 0, SEEK_END);
+    file_size = ftell (file);
+    rewind (file);
+
+    // allocate memory to file
+    buffer_file = (char *) malloc (sizeof (char) * file_size);
+    if (!buffer_file) {
+        printf ("Memory error!\n");
+        exit (EXIT_FAILURE);
+    }
+
+    // copy file into buffer
+    result = fread (buffer_file, 1, file_size, file);
+
+    if (result != file_size) {
+        printf("Reading error!\n");
+        exit (EXIT_FAILURE);
+    }
+    fclose (file);
+
+    return buffer_file;
+}
+
+
 // le arquivo com as operacoes
 void ler_operacoes(tipo_descritor_lista *expressao)
 {
-    FILE *arquivo = NULL;
+/*    FILE *arquivo = NULL;
 
     arquivo = fopen("operacao.txt", "r");
 
@@ -153,9 +188,15 @@ void ler_operacoes(tipo_descritor_lista *expressao)
         printf("Erro ao abrir arquivo!\n");
         exit(1);
     }
+*/
+    char *buffer_file = NULL;
 
-    while(fscanf(arquivo, "%s", linha) == 1)
-    {
+    buffer_file = load_file_memory ("operacao.txt");
+
+    printf("%s\n", buffer_file);
+
+    //while(fscanf(arquivo, "%s", linha) == 1)
+/*    {
 
         i = 0;
         insere_lista(expressao, get_operando(linha, &i));
@@ -190,7 +231,7 @@ void ler_operacoes(tipo_descritor_lista *expressao)
         }
         insere_lista(expressao, get_elemento_lista(operacao, operacao->ult));
     }
-    fclose(arquivo);
+    fclose(arquivo);*/
 }
 
 
