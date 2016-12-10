@@ -154,6 +154,8 @@ char *load_file_memory (char *file_name)
         exit (EXIT_FAILURE);
     }
 
+    // string terminator
+    file_size += 1;
     // allocate memory to file
     buffer_file = (char *) malloc (sizeof (char) * file_size);
     if (!buffer_file) {
@@ -162,12 +164,14 @@ char *load_file_memory (char *file_name)
     }
 
     // copy file into buffer
-    result = fread (buffer_file, 1, file_size, file);
-
-    if (result != file_size) {
+    result = fread (buffer_file, 1, (file_size - 1), file);
+    if (result != (file_size - 1)) {
         printf("Reading error!\n");
         exit (EXIT_FAILURE);
     }
+    // add string terminator
+    buffer_file[file_size] = '\0';
+
     fclose (file);
 
     return buffer_file;
@@ -177,54 +181,39 @@ char *load_file_memory (char *file_name)
 // le arquivo com as operacoes
 void ler_operacoes(tipo_descritor_lista *expressao)
 {
-/*    FILE *arquivo = NULL;
-
-    arquivo = fopen("operacao.txt", "r");
-
     int i = 0, op = 0;
 
     char *caracter = NULL;
 
-    char linha[100];
-
     tipo_descritor_lista *operacao = cria_descritor_lista();
 
-    if(!arquivo)
-    {
-        printf("Erro ao abrir arquivo!\n");
-        exit(1);
-    }
-*/
     char *buffer_file = NULL;
     char *file_name = "operacao.txt";
 
     buffer_file = load_file_memory (file_name);
 
-    printf("%s\n", buffer_file);
-
-    //while(fscanf(arquivo, "%s", linha) == 1)
-/*    {
-
-        i = 0;
-        insere_lista(expressao, get_operando(linha, &i));
+    // apenas uma expressao
+    while (buffer_file[i] != '\0' && buffer_file[i])
+    {
+        insere_lista(expressao, get_operando(buffer_file, &i));
         i++;
         //printf("%s\n", (char*)expressao->prim->dado);
-
-        while(linha[i] != '\n' && linha[i])
+ 
+        while(buffer_file[i] != '\n' && buffer_file[i])
         {
             // abre parenteses (
-            if( linha[i] == '+' || linha[i] == '-' || linha[i] == '*' || linha[i] == '/' || linha[i] == '^') {
+            if( buffer_file[i] == '+' || buffer_file[i] == '-' || buffer_file[i] == '*' || buffer_file[i] == '/' || buffer_file[i] == '^') {
                 caracter = (char *)malloc(1);
-                *caracter = linha[i];
+                *caracter = buffer_file[i];
                 insere_lista(operacao, &*caracter);
             }
             // letra ou numero
-            else if(isalpha(linha[i]) || isdigit(linha[i])) {
-                insere_lista(expressao, get_operando(linha, &i));
+            else if(isalpha(buffer_file[i]) || isdigit(buffer_file[i])) {
+                insere_lista(expressao, get_operando(buffer_file, &i));
                 op++;
             }
             // fecha parenteses (
-            else if(linha[i] == ')') {
+            else if(buffer_file[i] == ')') {
 
                     //while(operacao->prim && *((char*)operacao->prim->dado) != '(') {
 
@@ -236,9 +225,10 @@ void ler_operacoes(tipo_descritor_lista *expressao)
             }
             i++;
         }
+        // skip new line
+        while (buffer_file[i] == '\n') i++;
         insere_lista(expressao, get_elemento_lista(operacao, operacao->ult));
     }
-    fclose(arquivo);*/
 }
 
 
