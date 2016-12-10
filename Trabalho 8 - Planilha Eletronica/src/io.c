@@ -177,13 +177,30 @@ char *load_file_memory (char *file_name)
     return buffer_file;
 }
 
+// retorna true se for operador
+int is_operator(char character, int *parenteses) {
+
+    if (character == '+' || character == '-' || character == '*' || character == '/' || character == '^') {
+        return 1;
+    }
+    if (character == '(' ) {
+        (*parenteses)++;
+        return 1;
+    }
+    if (character == ')') {
+        (*parenteses)--;
+        return 1;
+    }
+    return 0;
+}
+
 
 // le arquivo com as operacoes
-void ler_operacoes(tipo_descritor_lista *expressao)
+void ler_operacoes (tipo_descritor_lista *expressao)
 {
-    int i = 0, op = 0;
+    int i = 0, parenteses = 0;
 
-    char *caracter = NULL;
+    char *sign = NULL;
 
     tipo_descritor_lista *operacao = cria_descritor_lista();
 
@@ -195,40 +212,40 @@ void ler_operacoes(tipo_descritor_lista *expressao)
     // apenas uma expressao
     while (buffer_file[i] != '\0' && buffer_file[i])
     {
-        insere_lista(expressao, get_operando(buffer_file, &i));
+        // skip new lines
+        while (buffer_file[i] == '\n') i++;
+
+        insere_lista (expressao, get_operando (buffer_file, &i));
         i++;
-        //printf("%s\n", (char*)expressao->prim->dado);
  
-        while(buffer_file[i] != '\n' && buffer_file[i])
+        while (buffer_file[i] != '\n' && buffer_file[i])
         {
-            // abre parenteses (
-            if( buffer_file[i] == '+' || buffer_file[i] == '-' || buffer_file[i] == '*' || buffer_file[i] == '/' || buffer_file[i] == '^') {
-                caracter = (char *)malloc(1);
-                *caracter = buffer_file[i];
-                insere_lista(operacao, &*caracter);
+            // operador (
+            if (is_operator (buffer_file[i], &parenteses))  {
+                sign = (char *) malloc (sizeof (char) * 2);
+                sign[0] = buffer_file[i];
+                sign[1] = '\0';
+                insere_lista (operacao, sign);
             }
             // letra ou numero
-            else if(isalpha(buffer_file[i]) || isdigit(buffer_file[i])) {
-                insere_lista(expressao, get_operando(buffer_file, &i));
-                op++;
-            }
-            // fecha parenteses (
-            else if(buffer_file[i] == ')') {
-
-                    //while(operacao->prim && *((char*)operacao->prim->dado) != '(') {
-
-                        insere_lista(expressao, get_elemento_lista(operacao, operacao->ult));
-                    //}
-                    //get_elemento_lista(operacao, operacao->ult);
-                    op = 0;
-                
+            else if (isalpha (buffer_file[i]) || isdigit (buffer_file[i])) {
+                insere_lista (expressao, get_operando (buffer_file, &i));
             }
             i++;
         }
-        // skip new line
-        while (buffer_file[i] == '\n') i++;
-        insere_lista(expressao, get_elemento_lista(operacao, operacao->ult));
+
+        //insere_lista(expressao, get_elemento_lista(operacao, operacao->ult));
     }
+
+    if (parenteses != 0) {
+        printf ("Erro de expressao.\n");
+        exit (EXIT_FAILURE);
+    }
+
+    //print operators list
+    imprime_lista (operacao);
+    printf("\n");
+    imprime_lista (expressao);
 }
 
 
