@@ -58,7 +58,7 @@ int operacao(char c);
 
 
 
-void calcula(tipo_descritor_lista *expressao, matriz_esparsa *matriz1);
+void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, matriz_esparsa *matriz1);
 
 
 // extrai numero de uma string

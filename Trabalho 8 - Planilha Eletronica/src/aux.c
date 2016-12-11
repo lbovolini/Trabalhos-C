@@ -1,5 +1,6 @@
 #include "aux.h"
 #include "io.h"
+#include <ctype.h>
 
 
 // cria lista e retorna
@@ -156,8 +157,9 @@ void imprime_lista(tipo_descritor_lista *descritor)
 
 	do
 	{
+        //((char *)percorrer->dado)[0]
         printf("[%s]\n", (char*)percorrer->dado);
-		printf("[%f]\n", *((float*)percorrer->dado));
+		//printf("[%f]\n", *((float*)percorrer->dado));
 		percorrer = percorrer->prox;
 	} while(percorrer != descritor->prim);
 }
@@ -267,6 +269,8 @@ char *get_operando(char *linha, int *i)
 	operando[indice_operando] = '\0';
 	(*i)--;
 
+    //printf("%s\n", operando);
+
 	return operando;
 }
 
@@ -282,9 +286,9 @@ int operacao(char c)
 }
 
 // !TODO > sem tempo
-void calcula(tipo_descritor_lista *expressao, matriz_esparsa *matriz1)
+void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, matriz_esparsa *matriz1)
 {
-    if(!expressao) return;
+    if(!expressao || !) return;
 
     if(!expressao->prim) return;
 
@@ -299,135 +303,25 @@ tipo_descritor_lista *o = cria_descritor_lista();
     st_lista_circular *inicio = expressao->prim;
     st_lista_circular *atual = NULL;
 
-
-    while(expressao->n > 2)
-    {
-        //printf("%c\n", *((char*)percorrer->dado)+0 );
-        atual = percorrer->prox;
-
-        if(operacao(*((char*)percorrer->dado) + 0)) 
-        {
-                 //               printf("(((( %c ))))\n", *((char*)percorrer->dado) + 0);
-
-            char *operador = (char*)get_elemento(expressao, &percorrer);
+ /*           char *operador = (char*)get_elemento(expressao, &percorrer);
                 //    printf("(((( %c ))))\n", *((char*)percorrer->dado) + 0);
 
             //printf("%s\n", operador);
 
             void *op2 = get_elemento(expressao, &percorrer);
+operador2 = valor_elemento(matriz1, (int)(*((char*)op2 + 1)) - 48, (int)(*((char*)op2 + 0)) - 64);
 
-           // printf("OP2 = %s\n", op2);
-
-            void *op1 = get_elemento(expressao, &percorrer);
-
-             //       printf("(((( %c ))))\n", *((char*)percorrer->dado) + 0);
-
-            //printf("OP1 = %s\n", op1);
-
-                  //  printf("(((( %c ))))\n", *((char*)percorrer->dado) + 0);
-
-            //percorrer = percorrer->prox;
-
-                 //   printf("(((( %c ))))\n", *((char*)percorrer->dado) + 0);
-
-            //printf("O))))) - %c\n", *((char*)op1));
-
-            if(!isalpha(*((char*)op1))) {
-                //operador2 = extrair_numero(op2, 0, '+');
-                operador2 = *((float*)op2);
-            }
-            else {
-                operador2 = valor_elemento(matriz1, (int)(*((char*)op2 + 1)) - 48, (int)(*((char*)op2 + 0)) - 64);
-            }
-
-            if(!isalpha(*((char*)op1))) {
-                //operador1 = extrair_numero(op1, 0, '+');
-                operador1 = *((float*)op1);
-            }
-            else {
-                operador1 = valor_elemento(matriz1, (int)(*((char*)op1 +1)) - 48, (int)(*((char*)op1 + 0)) - 64);
-            }
-           // printf("OP1 - %f\n", operador1);
-           // printf("OP2 - %f\n", operador2);
-
-            res = (float*)malloc(sizeof(float));
-                 //   printf("(((( %c ))))\n", *((char*)percorrer->dado) + 0);
+ insere_antes_lista(expressao, atual, res);*/
 
 
-            switch(operador[0]) 
-            {
-                case '+':
-                    *res = operador1 + operador2;
-                  //  printf("%f\n", *res);
-                    insere_antes_lista(expressao, atual, res);
-                    break;
 
-                case '-':
-                    *res = operador1 - operador2;
-                    //printf("%f\n", *res);
-                    insere_antes_lista(expressao, atual, res);
-                    break;
 
-                case '*':
-                    *res = operador1 * operador2;
-                    //printf("%f\n", *res);
-                    insere_antes_lista(expressao, atual, res);
-                    break;
 
-                case '/':
-                    if(operador2 == 0) {
-                        printf("Impossivel dividir por 0.\n");
-                        exit(0);
-                    }
-                    *res = operador1 / operador2;
-                    //printf("%f\n", *res);
-                    insere_antes_lista(expressao, atual, res);
-                    break;
 
-                case '^':
-                    *res = pow(operador1, operador2);
-                    //printf("%f\n", *res);
-                    insere_antes_lista(expressao, atual, res);
-                    break;
-            }
-            percorrer = atual->ant;
-        }
-        percorrer = percorrer->prox;
-    } 
+    //printf("Matriz 1\n");
+    //imprime_matriz(matriz1);
 
-    percorrer = expressao->prim;
-    void *result = get_elemento(expressao, &percorrer);
-    char *dest = (char*)get_elemento(expressao, &percorrer);
-    float resultado;
-
-    if(!isalpha(*((char*)result)))
-    {
-        resultado = *((float*)result);
-    }
-    else {
-        resultado = valor_elemento(matriz1, (int)(*((char*)result +1)) - 48, (int)(*((char*)result + 0)) - 64);
-    }
-
-    //printf("%f\n", resultado);
-
-    if(resultado == 0)
-    {
-        remove_elemento(matriz1, dest[1]- 48, ((int)dest[0]) - 64);
-    }
-    else
-    {
-        // se elemento nao existe
-        if(altera_elemento(matriz1, dest[1]- 48, ((int)dest[0]) - 64, resultado))
-        {
-            insere_ordenado(matriz1, dest[1]- 48, ((int)dest[0]) - 64, resultado);
-        }
-
-    }
-
-    printf("Matriz 1\n");
-    imprime_matriz(matriz1);
-
-    escrever_arquivo(matriz1, NULL, NULL, NULL);
+    //escrever_arquivo(matriz1, NULL, NULL, NULL);
     
 }
 
