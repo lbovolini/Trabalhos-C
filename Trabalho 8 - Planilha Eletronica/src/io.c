@@ -196,7 +196,7 @@ int is_operator(char character, int *parenteses) {
 
 
 // le arquivo com as operacoes
-void ler_operacoes (tipo_descritor_lista *expressao)
+void ler_operacoes (tipo_descritor_lista *expressao, tipo_descritor_lista *operacao)
 {
     int i = 0, parenteses = 0;
 
