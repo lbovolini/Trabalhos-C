@@ -335,6 +335,7 @@ float get_value (matriz_esparsa *matriz1, st_lista_circular *operando) {
     return value;
 }
 
+/* Show default set of exception flags. */
 void show_fe_exceptions(void)
 {
     printf("current exceptions raised: ");
@@ -372,7 +373,12 @@ float _div (float operando1, float operando2) {
 }
 
 float _pow (float operando1, float operando2) {
-    return pow(operando1, operando2);
+
+    float result = pow(operando1, operando2);
+
+    // error handling
+    show_fe_exceptions();
+    return result;
 }
 
 
