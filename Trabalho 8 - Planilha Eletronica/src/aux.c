@@ -157,7 +157,7 @@ void imprime_lista(tipo_descritor_lista *descritor)
 
 	do
 	{
-        if (atof ((char*)percorrer->dado))
+        if (isalpha (*((char*)percorrer->dado)) || ispunct (*((char*)percorrer->dado)))
             printf("[char %c]\n", ((char*)percorrer->dado)[0]);
         else
             printf("[float %f]\n", *((float*)percorrer->dado));
@@ -405,8 +405,7 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
 
         // se operando1 nao for numero
         if (!is_number (atual_operando->dado)) {
-            operando1 = get_value (matriz1, atual_operando);    
-            printf("operando1 %f\n", operando1);        
+            operando1 = get_value (matriz1, atual_operando);          
         }
         else
             operando1 = *(float *)atual_operando->dado;
@@ -440,9 +439,6 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
                 //remover_operando = atual_operando;
                 ///atual_operando = atual_operando->prox;
                 atual_operando = get_elemento_lista (expressao, atual_operando);
-
-        printf ("+++++++++\n");
-        imprime_lista (expressao);
 
                 // aloca resultado
                 result = (float*)malloc(sizeof(float));
