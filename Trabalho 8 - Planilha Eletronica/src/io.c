@@ -202,7 +202,7 @@ void ler_operacoes (tipo_descritor_lista *expressao, tipo_descritor_lista *opera
 
     char *sign = NULL;
 
-    tipo_descritor_lista *operacao = cria_descritor_lista();
+    //tipo_descritor_lista *operacao = cria_descritor_lista();
 
     char *buffer_file = NULL;
     char *file_name = "operacao.txt";
@@ -215,9 +215,10 @@ void ler_operacoes (tipo_descritor_lista *expressao, tipo_descritor_lista *opera
         // skip new lines
         while (buffer_file[i] == '\n') i++;
 
-        insere_lista (expressao, get_operando (buffer_file, &i));
-        i++;
- 
+       // insere_lista (expressao, get_operando (buffer_file, &i));
+       // i++;
+
+
         while (buffer_file[i] != '\n' && buffer_file[i])
         {
             // operador (
@@ -243,9 +244,9 @@ void ler_operacoes (tipo_descritor_lista *expressao, tipo_descritor_lista *opera
     }
 
     //print operators list
-    imprime_lista (operacao);
-    printf("\n");
-    imprime_lista (expressao);
+    //imprime_lista (operacao);
+    //printf("\n");
+    //imprime_lista (expressao);
 }
 
 
