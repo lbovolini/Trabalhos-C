@@ -62,6 +62,8 @@ float _sub (float operando1, float operando2);
 
 float _mul (float operando1, float operando2);
 
+float _div (float operando1, float operando2);
+
 
 void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, matriz_esparsa *matriz1);
 

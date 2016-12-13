@@ -348,7 +348,7 @@ float _mul (float operando1, float operando2) {
     return operando1 * operando2;
 }
 
-float divide (float operando1, float operando2) {
+float _div (float operando1, float operando2) {
 
     if (operando2 == 0) {
         printf("Impossivel dividir por 0.\n");
