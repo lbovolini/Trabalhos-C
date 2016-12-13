@@ -477,7 +477,10 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
                     case '*' :
                         *result = _mul (operando1, operando2);
                         break;
-                    //case '/' :
+                    
+                    case '/' :
+                        *result = _div (operando1, operando2);
+                        break;
 
                     //case '^' :
 
