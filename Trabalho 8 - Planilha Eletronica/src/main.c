@@ -22,7 +22,7 @@ int main()
 
     //imprime_lista(lista);
     //printf("\n");
-    //calcula(lista, matriz1);
+    calcula(expressao, operacao, matriz1);
     //printf("--------------\n");
     //imprime_lista(lista);
 

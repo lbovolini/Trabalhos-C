@@ -48,7 +48,7 @@ void imprime_lista(tipo_descritor_lista *descritor);
 
 
 // remove elemento da lista e retorna
-void *get_elemento_lista(tipo_descritor_lista *descritor, st_lista_circular *atual);
+st_lista_circular *get_elemento_lista(tipo_descritor_lista *descritor, st_lista_circular *atual);
 
 
 char *get_operando(char *linha, int *i);
