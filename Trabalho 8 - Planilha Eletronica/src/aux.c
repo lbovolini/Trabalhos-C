@@ -344,7 +344,7 @@ float _sub (float operando1, float operando2) {
     return operando1 - operando2;
 }
 
-float multiplica (float operando1, float operando2) {
+float _mul (float operando1, float operando2) {
     return operando1 * operando2;
 }
 
