@@ -157,21 +157,24 @@ void imprime_lista(tipo_descritor_lista *descritor)
 
 	do
 	{
-        //((char *)percorrer->dado)[0]
-        printf("[%s]\n", (char*)percorrer->dado);
-		//printf("[%f]\n", *((float*)percorrer->dado));
+        if (atof ((char*)percorrer->dado))
+            printf("[char %c]\n", ((char*)percorrer->dado)[0]);
+        else
+            printf("[float %f]\n", *((float*)percorrer->dado));
+		
 		percorrer = percorrer->prox;
 	} while(percorrer != descritor->prim);
 }
 
 
 // remove elemento da lista e retorna
-void *get_elemento_lista(tipo_descritor_lista *descritor, st_lista_circular *atual)
+st_lista_circular *get_elemento_lista(tipo_descritor_lista *descritor, st_lista_circular *atual)
 {
 	if(!descritor || ! atual) return NULL;
 
 	void *dado = NULL;
     st_lista_circular *remover = NULL;
+    st_lista_circular *aux = NULL;
 
 	if(atual->ant == atual)
 	{
@@ -180,9 +183,10 @@ void *get_elemento_lista(tipo_descritor_lista *descritor, st_lista_circular *atu
 		descritor->n--;
 		dado = atual->dado;
 		atual->dado = NULL;
+        //atual = NULL;
 		//free(atual);
 
-		return dado;
+		return aux;
 	}
 	if(descritor->prim == atual)
 	{
@@ -193,6 +197,7 @@ void *get_elemento_lista(tipo_descritor_lista *descritor, st_lista_circular *atu
 		descritor->ult = atual->ant;
 	}
 
+    aux = atual->prox;
 	atual->prox->ant = atual->ant;
 	atual->ant->prox = atual->prox;
 
@@ -201,7 +206,7 @@ void *get_elemento_lista(tipo_descritor_lista *descritor, st_lista_circular *atu
 	descritor->n--;
 	//free(atual);
 
-	return dado;
+	return aux;
 }
 
 
@@ -275,43 +280,219 @@ char *get_operando(char *linha, int *i)
 }
 
 
+// 1 Higher
+int level (char *operador) {
+    if (operador[0] == ')')
+        return 1;
+    if (operador[0] == '^')
+        return 2;
+    if (operador[0] == '/' || operador[0] == '*')
+        return 3;
+    if (operador[0] == '-' || operador[0] == '+')
+        return 4;
+    if (operador[0] == '(')
+        return 5;
+    return 0;
+}
 
 
 
-int operacao(char c)
+int operacao (char c)
 {
     if(c == '+' || c == '-' || c == '*' || c == '/' || c == '^')
         return 1;
     return 0;
 }
 
+int is_number (void *dado) {
+    char *string = (char *)dado;
+
+    if (isdigit(string[0]))
+        return 1;
+    return 0;
+}
+
+int get_line (void *line) {
+    return (int)(*((char*)line + 0)) - 64;
+}
+
+int get_col (void *col) {
+    return (int)(*((char*)col + 1)) - 48;
+}
+
+float get_value (matriz_esparsa *matriz1, st_lista_circular *operando) {
+
+    float value = 0;
+
+    if (!matriz1 || !operando) {
+        printf ("Erro get_value()\n");
+        exit (EXIT_FAILURE);
+    }
+
+    value = valor_elemento(matriz1, get_col(operando->dado), get_line(operando->dado));
+    //printf("%f\n", value);
+
+    return value;
+}
+
+
+float soma (float operando1, float operando2) {
+    return operando1 + operando2;
+}
+
+float subtrai (float operando1, float operando2) {
+    return operando1 - operando2;
+}
+
+float multiplica (float operando1, float operando2) {
+    return operando1 * operando2;
+}
+
+float divide (float operando1, float operando2) {
+
+    if (operando2 == 0) {
+        printf("Impossivel dividir por 0.\n");
+        exit (EXIT_FAILURE);
+    }
+
+    return operando1 / operando2;
+}
+
+/*
+float eleva (float operando1, float operando2) {
+    return operando1  operando2;
+}*/
+
+
+
 // !TODO > sem tempo
 void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, matriz_esparsa *matriz1)
 {
-    if(!expressao || !) return;
+    if(!expressao || !operacao) return;
 
-    if(!expressao->prim) return;
+    if(!expressao->prim || !operacao->prim) return;
 
     if(!matriz1) return;
 
-    float operador1, operador2;
 
-    float *res = NULL;
+    st_lista_circular *atual_operando = NULL;
+    st_lista_circular *atual_operador = NULL;
+    st_lista_circular *prim_operando = NULL;
+    st_lista_circular *prim_operador = NULL;
+    st_lista_circular *remover_operador = NULL;
+    st_lista_circular *remover_operando = NULL;
 
-tipo_descritor_lista *o = cria_descritor_lista();
-    st_lista_circular *percorrer = expressao->prim;
-    st_lista_circular *inicio = expressao->prim;
-    st_lista_circular *atual = NULL;
+    prim_operando = expressao->prim;
+    prim_operador = operacao->prim;
 
- /*           char *operador = (char*)get_elemento(expressao, &percorrer);
-                //    printf("(((( %c ))))\n", *((char*)percorrer->dado) + 0);
+    atual_operando = expressao->prim;
+    atual_operador = operacao->prim;
 
-            //printf("%s\n", operador);
+    int bad_expression = 0;
+    float *result = NULL;
+    float operando1 = 0;
+    float operando2 = 0;
 
-            void *op2 = get_elemento(expressao, &percorrer);
-operador2 = valor_elemento(matriz1, (int)(*((char*)op2 + 1)) - 48, (int)(*((char*)op2 + 0)) - 64);
+    // variavel de destino
+    atual_operando = get_elemento_lista (expressao, atual_operando);
+    st_lista_circular *destino_resultado = atual_operando;
 
- insere_antes_lista(expressao, atual, res);*/
+    while (atual_operador) {
+        char *operador = (char *)atual_operador->dado;
+        char *prox_operador = (char *)atual_operador->prox->dado;
+
+
+
+        // se operando1 nao for numero
+        if (!is_number (atual_operando->dado)) {
+            operando1 = get_value (matriz1, atual_operando);    
+            printf("operando1 %f\n", operando1);        
+        }
+        else
+            operando1 = *(float *)atual_operando->dado;
+
+
+        // se operando2 nao for numero
+        if (!is_number (atual_operando->prox->dado)) {
+            operando2 = get_value (matriz1, atual_operando->prox); 
+            //printf("operando2 %f\n", operando2);             
+        }
+        else
+            operando2 = *(float *)atual_operando->prox->dado;
+
+
+
+
+        // ha mais operadores
+        //if (atual_operador != atual_operador->prox) {
+            // prioridade do operador atual eh maior do que o proximo
+            if (level (prox_operador) >= level (operador)) {
+
+
+                // nao eh um numero
+               // if (!atof(dado))
+
+                // Remove operando1
+                //remover_operando = atual_operando;
+                //atual_operando = atual_operando->prox;
+                atual_operando = get_elemento_lista (expressao, atual_operando);
+                // Remove operando2
+                //remover_operando = atual_operando;
+                ///atual_operando = atual_operando->prox;
+                atual_operando = get_elemento_lista (expressao, atual_operando);
+
+        printf ("+++++++++\n");
+        imprime_lista (expressao);
+
+                // aloca resultado
+                result = (float*)malloc(sizeof(float));
+                // calula
+                switch (operador[0]) {
+                    case '(' :
+                        prim_operador = atual_operador;
+                        break;
+
+                    case '+' :  
+                        *result = soma (operando1, operando2);
+
+                        break;
+
+
+                    //case '-' :
+//
+                    //case '*' :
+//
+                    //case '/' :
+
+                    //case '^' :
+
+                }
+
+                // insere resultado na lista
+                insere_antes_lista(expressao, atual_operando, result);
+                // atualiza atual
+                //atual_operando = atual_operando->ant;
+
+                // remove operador
+                //remover_operador = atual_operador;
+                //atual_operador = atual_operador->prox;
+                atual_operador = get_elemento_lista (operacao, atual_operador);     
+            }
+            else 
+                atual_operador = atual_operador->prox;
+        //}
+
+
+
+        
+
+    }
+
+        printf ("---------\n");
+        imprime_lista (operacao);
+        printf ("+++++++++\n");
+        imprime_lista (expressao);
+
 
 
 
