@@ -1,6 +1,5 @@
 #include "aux.h"
 #include "io.h"
-#include <ctype.h>
 
 
 // cria lista e retorna
