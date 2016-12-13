@@ -340,7 +340,7 @@ float _add (float operando1, float operando2) {
     return operando1 + operando2;
 }
 
-float subtrai (float operando1, float operando2) {
+float _sub (float operando1, float operando2) {
     return operando1 - operando2;
 }
 
