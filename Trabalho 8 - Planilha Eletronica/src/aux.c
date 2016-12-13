@@ -264,9 +264,10 @@ char *get_operando(char *linha, int *i)
 
 	char *operando = NULL;
 
-	while(isalpha(linha[*i]) ||isdigit(linha[*i])) {(*i)++;}
+	while(isalpha(linha[*i]) || isdigit(linha[*i])) {(*i)++;}
 
 	operando = (char *)malloc((*i - indice_inicio) * sizeof(char));
+
 
 	while(indice_operando < ((*i) - indice_inicio)) {
 		operando[indice_operando] = linha[indice_inicio + indice_operando];
@@ -275,8 +276,6 @@ char *get_operando(char *linha, int *i)
 
 	operando[indice_operando] = '\0';
 	(*i)--;
-
-    //printf("%s\n", operando);
 
 	return operando;
 }
@@ -340,14 +339,15 @@ float get_value (matriz_esparsa *matriz1, st_lista_circular *operando) {
 /* Show default set of exception flags. */
 void show_fe_exceptions(void)
 {
-    printf("current exceptions raised: ");
+    //printf("current exceptions raised: ");
     if(fetestexcept(FE_DIVBYZERO))     printf(" FE_DIVBYZERO");
-    if(fetestexcept(FE_INEXACT))       printf(" FE_INEXACT");
+    //if(fetestexcept(FE_INEXACT))       printf(" FE_INEXACT");
     if(fetestexcept(FE_INVALID))       printf(" FE_INVALID");
     if(fetestexcept(FE_OVERFLOW))      printf(" FE_OVERFLOW");
     if(fetestexcept(FE_UNDERFLOW))     printf(" FE_UNDERFLOW");
+    if(fetestexcept(FE_INEXACT))       return; //printf(" FE_INEXACT");
     if(fetestexcept(FE_ALL_EXCEPT)==0) return;
-    printf("\n");
+    //printf("\n");
     exit (EXIT_FAILURE);
 }
 
@@ -436,8 +436,10 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
             operando2 = get_value (matriz1, atual_operando->prox); 
             //printf("operando2 %f\n", operando2);             
         }
-        else
+        else{
             operando2 = *(float *)atual_operando->prox->dado;
+            printf("op2 %f\n", operando2);
+        }
 
 
 
@@ -529,10 +531,10 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
 }
 
 // extrai numero de uma string
-float extrair_numero(char *string, int ind_inicio_num, char sinal)
+float *extrair_numero(char *string, int *ind_inicio_num, char sinal)
 {
-    int   ind_fim_num = ind_inicio_num;
-    float float_num;
+    int   ind_fim_num = *ind_inicio_num;
+    float *float_num = (float *) malloc (sizeof (float));
 
     char  string_num[100];
 
@@ -554,20 +556,20 @@ float extrair_numero(char *string, int ind_inicio_num, char sinal)
     //ind_fim_num--;
 
     // extrai numero para string_num
-    strncpy(string_num, &string[ind_inicio_num], (ind_fim_num - ind_inicio_num));
+    strncpy(string_num, &string[*ind_inicio_num], (ind_fim_num - *ind_inicio_num));
 
     // adiciona caractere de fim de string
-    string_num[ind_fim_num - ind_inicio_num] = '\0';
+    string_num[ind_fim_num - *ind_inicio_num] = '\0';
     
     // convert string_num para float
-    float_num = atof(string_num);
+    *float_num = atof(string_num);
 
     if(sinal == '-')
     {
-        float_num *= -1;
+        *float_num *= -1;
     }
 
-    ind_inicio_num = ind_fim_num;
+    *ind_inicio_num = ind_fim_num;
     // retorna numero
     return float_num;
 }

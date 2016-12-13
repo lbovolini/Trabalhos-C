@@ -74,7 +74,7 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
 
 
 // extrai numero de uma string
-float extrair_numero(char *string, int ind_inicio_num, char sinal);
+float *extrair_numero(char *string, int *ind_inicio_num, char sinal);
 
 
 #endif

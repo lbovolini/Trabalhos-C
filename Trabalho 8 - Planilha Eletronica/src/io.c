@@ -234,7 +234,8 @@ void ler_operacoes (tipo_descritor_lista *expressao, tipo_descritor_lista *opera
             }
             // numero
             else if (isdigit (buffer_file[i])) {
-                insere_lista (expressao, get_operando (buffer_file, &i), FLOAT);
+                printf("BUFF %c\n", buffer_file[i]);
+                insere_lista (expressao, extrair_numero(buffer_file, &i, '+'), FLOAT);
             }
             i++; 
         }
