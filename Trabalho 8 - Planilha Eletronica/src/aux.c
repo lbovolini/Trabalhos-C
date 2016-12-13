@@ -335,6 +335,19 @@ float get_value (matriz_esparsa *matriz1, st_lista_circular *operando) {
     return value;
 }
 
+void show_fe_exceptions(void)
+{
+    printf("current exceptions raised: ");
+    if(fetestexcept(FE_DIVBYZERO))     printf(" FE_DIVBYZERO");
+    if(fetestexcept(FE_INEXACT))       printf(" FE_INEXACT");
+    if(fetestexcept(FE_INVALID))       printf(" FE_INVALID");
+    if(fetestexcept(FE_OVERFLOW))      printf(" FE_OVERFLOW");
+    if(fetestexcept(FE_UNDERFLOW))     printf(" FE_UNDERFLOW");
+    if(fetestexcept(FE_ALL_EXCEPT)==0) return;
+    printf("\n");
+    exit (EXIT_FAILURE);
+}
+
 
 float _add (float operando1, float operando2) {
     return operando1 + operando2;
@@ -358,10 +371,9 @@ float _div (float operando1, float operando2) {
     return operando1 / operando2;
 }
 
-/*
-float eleva (float operando1, float operando2) {
-    return operando1  operando2;
-}*/
+float _pow (float operando1, float operando2) {
+    return pow(operando1, operando2);
+}
 
 
 
