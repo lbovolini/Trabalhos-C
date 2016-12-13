@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <math.h>
+#include <fenv.h>
+#include <float.h>
 
 
 typedef struct lista_circular 
