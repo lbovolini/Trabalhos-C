@@ -467,12 +467,12 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
                         break;
 
                     case '+' :  
-                        *result = soma (operando1, operando2);
-
+                        *result = _add (operando1, operando2);
                         break;
 
-
-                    //case '-' :
+                    case '-' :
+                        *result = _sub (operando1, operando2);
+                        break;
 //
                     //case '*' :
 //
