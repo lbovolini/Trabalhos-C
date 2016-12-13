@@ -226,13 +226,17 @@ void ler_operacoes (tipo_descritor_lista *expressao, tipo_descritor_lista *opera
                 sign = (char *) malloc (sizeof (char) * 2);
                 sign[0] = buffer_file[i];
                 sign[1] = '\0';
-                insere_lista (operacao, sign);
+                insere_lista (operacao, sign, STRING);
             }
-            // letra ou numero
-            else if (isalpha (buffer_file[i]) || isdigit (buffer_file[i])) {
-                insere_lista (expressao, get_operando (buffer_file, &i));
+            // letra
+            else if (isalpha (buffer_file[i])) {
+                insere_lista (expressao, get_operando (buffer_file, &i), STRING);
             }
-            i++;
+            // numero
+            else if (isdigit (buffer_file[i])) {
+                insere_lista (expressao, get_operando (buffer_file, &i), FLOAT);
+            }
+            i++; 
         }
 
         //insere_lista(expressao, get_elemento_lista(operacao, operacao->ult));
@@ -244,9 +248,9 @@ void ler_operacoes (tipo_descritor_lista *expressao, tipo_descritor_lista *opera
     }
 
     //print operators list
-    //imprime_lista (operacao);
+    imprime_lista (operacao);
     //printf("\n");
-    //imprime_lista (expressao);
+    imprime_lista (expressao);
 }
 
 

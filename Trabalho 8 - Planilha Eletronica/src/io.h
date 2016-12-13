@@ -5,6 +5,9 @@
 #ifndef IO
 #define IO
 
+#define STRING 1
+#define FLOAT 2
+
 #include "matriz.h"
 #include "funcoes.h"
 #include "aux.h"

@@ -12,6 +12,7 @@
 typedef struct lista_circular 
 {
     void *dado;
+    int type;
     struct lista_circular *ant, 
                           *prox;
 } st_lista_circular ;
@@ -30,7 +31,7 @@ typedef struct
 
 
 // cria lista e retorna
-st_lista_circular *cria_lista(void *dado);
+st_lista_circular *cria_lista(void *dado, int type);
 
 
 // cria descritor lista e retorna
@@ -38,11 +39,11 @@ tipo_descritor_lista *cria_descritor_lista(void);
 
 
 // insere na lista
-void insere_lista(tipo_descritor_lista *descritor, void *dado);
+void insere_lista(tipo_descritor_lista *descritor, void *dado, int type);
 
 
 // insere na lista
-void insere_inicio_lista(tipo_descritor_lista *descritor, void *dado);
+void insere_inicio_lista(tipo_descritor_lista *descritor, void *dado, int type);
 
 
 // imprime lista

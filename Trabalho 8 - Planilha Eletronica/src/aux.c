@@ -3,11 +3,12 @@
 
 
 // cria lista e retorna
-st_lista_circular *cria_lista(void *dado)
+st_lista_circular *cria_lista(void *dado, int type)
 {
     st_lista_circular *lista = NULL;
 
     lista = (st_lista_circular*)malloc(sizeof(st_lista_circular));
+    lista->type = type;
  	lista->dado = dado;
     lista->ant = lista;
     lista->prox = lista;
@@ -35,7 +36,7 @@ tipo_descritor_lista *cria_descritor_lista(void)
 }
 
 // insere na lista
-void insere_lista(tipo_descritor_lista *descritor, void *dado)
+void insere_lista(tipo_descritor_lista *descritor, void *dado, int type)
 {
     if(!descritor) return;
     if(!dado) return;
@@ -44,7 +45,7 @@ void insere_lista(tipo_descritor_lista *descritor, void *dado)
     st_lista_circular *lista = NULL;
 
     percorrer = descritor;
-    lista = cria_lista(dado);
+    lista = cria_lista(dado, type);
 
     //printf("%s\n", (char*)lista->dado);
     // lista vazia
@@ -69,7 +70,7 @@ void insere_lista(tipo_descritor_lista *descritor, void *dado)
 
 
 // insere na lista
-void insere_antes_lista(tipo_descritor_lista *descritor, st_lista_circular *atual, void *dado)
+void insere_antes_lista(tipo_descritor_lista *descritor, st_lista_circular *atual, void *dado, int type)
 {
     if(!descritor) return;
     if(!dado) return;
@@ -79,7 +80,7 @@ void insere_antes_lista(tipo_descritor_lista *descritor, st_lista_circular *atua
     st_lista_circular *lista = NULL;
 
     percorrer = descritor;
-    lista = cria_lista(dado);
+    lista = cria_lista(dado, type);
 
     //printf("%s\n", (char*)lista->dado);
     // lista vazia
@@ -111,7 +112,7 @@ void insere_antes_lista(tipo_descritor_lista *descritor, st_lista_circular *atua
 
 
 // insere na lista
-void insere_inicio_lista(tipo_descritor_lista *descritor, void *dado)
+void insere_inicio_lista(tipo_descritor_lista *descritor, void *dado, int type)
 {
     if(!descritor) return;
 
@@ -119,7 +120,7 @@ void insere_inicio_lista(tipo_descritor_lista *descritor, void *dado)
     st_lista_circular *lista = NULL;
 
     percorrer = descritor;
-    lista = cria_lista(dado);
+    lista = cria_lista(dado, type);
 
     //printf("%s\n", (char*)lista->dado);
     // lista vazia
@@ -156,8 +157,10 @@ void imprime_lista(tipo_descritor_lista *descritor)
 
 	do
 	{
-        if (isalpha (*((char*)percorrer->dado)) || ispunct (*((char*)percorrer->dado)))
-            printf("[char %c]\n", ((char*)percorrer->dado)[0]);
+        //if (isalpha (*((char*)percorrer->dado)) || ispunct (*((char*)percorrer->dado)))
+        //if (isdigit(*((float*)percorrer->dado)))
+        if (percorrer->type == STRING)
+            printf("[char %s]\n", (char*)percorrer->dado);
         else
             printf("[float %f]\n", *((float*)percorrer->dado));
 		
@@ -488,7 +491,7 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
                 }
 
                 // insere resultado na lista
-                insere_antes_lista(expressao, atual_operando, result);
+                insere_antes_lista(expressao, atual_operando, result, FLOAT);
                 // atualiza atual
                 //atual_operando = atual_operando->ant;
 
