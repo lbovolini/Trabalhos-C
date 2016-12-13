@@ -336,7 +336,7 @@ float get_value (matriz_esparsa *matriz1, st_lista_circular *operando) {
 }
 
 
-float soma (float operando1, float operando2) {
+float _add (float operando1, float operando2) {
     return operando1 + operando2;
 }
 

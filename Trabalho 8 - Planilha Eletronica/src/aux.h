@@ -56,6 +56,7 @@ char *get_operando(char *linha, int *i);
 
 int operacao(char c);
 
+float _add (float operando1, float operando2);
 
 
 void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, matriz_esparsa *matriz1);
