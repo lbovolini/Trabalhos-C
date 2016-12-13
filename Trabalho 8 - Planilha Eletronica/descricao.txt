@@ -32,3 +32,21 @@ Operações
 Resultado
 
 Como resultado deverá ser exibido na tela a matriz resultante das operações e armazenadas num arquivo chamado (resultado.txt).
+
+Testes
+
+Considerando a Matriz com os elementos:
+
+1 2 3 4 5.5
+
+0 2 4 6 8.8
+
+1 1.2 4 5 6.6
+
+Equações:
+
+A1=(((A1+B2)*(E3/B2))+A5)
+
+B1=((C2^C3)/E2)
+
+C1=((E3-E2)+((B1-B2)*(C1+B3)))
