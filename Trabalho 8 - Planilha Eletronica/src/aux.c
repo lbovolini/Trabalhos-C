@@ -424,7 +424,7 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
 
 
         // se operando1 nao for numero
-        if (!is_number (atual_operando->dado)) {
+        if (atual_operando->type == STRING) {
             operando1 = get_value (matriz1, atual_operando);          
         }
         else
@@ -432,7 +432,7 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
 
 
         // se operando2 nao for numero
-        if (!is_number (atual_operando->prox->dado)) {
+        if (atual_operando->prox->type == STRING) {
             operando2 = get_value (matriz1, atual_operando->prox); 
             //printf("operando2 %f\n", operando2);             
         }
