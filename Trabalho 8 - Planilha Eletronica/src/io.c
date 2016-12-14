@@ -221,6 +221,7 @@ void ler_operacoes (tipo_descritor_lista *expressao, tipo_descritor_lista *opera
 
         while (buffer_file[i] != '\n' && buffer_file[i])
         {
+
             // operador (
             if (is_operator (buffer_file[i], &parenteses))  {
                 sign = (char *) malloc (sizeof (char) * 2);
@@ -234,8 +235,10 @@ void ler_operacoes (tipo_descritor_lista *expressao, tipo_descritor_lista *opera
             }
             // numero
             else if (isdigit (buffer_file[i])) {
-                printf("BUFF %c\n", buffer_file[i]);
+                //printf("BUFF %c\n", buffer_file[i]);
+                //printf("i == %d\n", i);
                 insere_lista (expressao, extrair_numero(buffer_file, &i, '+'), FLOAT);
+                //printf("i == %d\n", i);
             }
             i++; 
         }
@@ -248,10 +251,6 @@ void ler_operacoes (tipo_descritor_lista *expressao, tipo_descritor_lista *opera
         exit (EXIT_FAILURE);
     }
 
-    //print operators list
-    imprime_lista (operacao);
-    //printf("\n");
-    imprime_lista (expressao);
 }
 
 

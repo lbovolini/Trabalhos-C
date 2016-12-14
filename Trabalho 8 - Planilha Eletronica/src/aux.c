@@ -175,7 +175,6 @@ st_lista_circular *get_elemento_lista(tipo_descritor_lista *descritor, st_lista_
 	if(!descritor || ! atual) return NULL;
 
 	void *dado = NULL;
-    st_lista_circular *remover = NULL;
     st_lista_circular *aux = NULL;
 
 	if(atual->ant == atual)
@@ -283,7 +282,8 @@ char *get_operando(char *linha, int *i)
 
 // 1 Higher
 int level (char *operador) {
-    if (operador[0] == ')')
+
+    if (operador[0] == '(')
         return 1;
     if (operador[0] == '^')
         return 2;
@@ -291,14 +291,14 @@ int level (char *operador) {
         return 3;
     if (operador[0] == '-' || operador[0] == '+')
         return 4;
-    if (operador[0] == '(')
+    if (operador[0] == ')')
         return 5;
     return 0;
 }
 
 
 
-int operacao (char c)
+int is_operation (char c)
 {
     if(c == '+' || c == '-' || c == '*' || c == '/' || c == '^')
         return 1;
@@ -384,6 +384,41 @@ float _pow (float operando1, float operando2) {
 }
 
 
+// seta operador para posicao inicial e retorna numero de vezes que voltou
+st_lista_circular *goto_parent (st_lista_circular *operador, int *n) {
+
+    if (!operador) return 0;
+
+    if (!operador->dado) return 0;
+
+    st_lista_circular *op = operador;
+
+    while (((char *)op->dado)[0] != '(') {
+        (*n)++;
+        op = op->ant;
+    }
+
+    return op;
+}
+
+
+// volta n operandos
+st_lista_circular *voltar_operando (st_lista_circular *operando, int n) {
+
+    if (!operando) return NULL;
+
+    if (n <= 0) return NULL;
+
+    st_lista_circular *op = operando;
+
+    while (n > 0) {
+        op = op->ant;
+        n--;
+    }
+
+    return op;
+}
+
 
 // !TODO > sem tempo
 void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, matriz_esparsa *matriz1)
@@ -397,77 +432,79 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
 
     st_lista_circular *atual_operando = NULL;
     st_lista_circular *atual_operador = NULL;
-    st_lista_circular *prim_operando = NULL;
-    st_lista_circular *prim_operador = NULL;
-    st_lista_circular *remover_operador = NULL;
-    st_lista_circular *remover_operando = NULL;
-
-    prim_operando = expressao->prim;
-    prim_operador = operacao->prim;
 
     atual_operando = expressao->prim;
     atual_operador = operacao->prim;
 
-    int bad_expression = 0;
+    //int bad_expression = 0;
     float *result = NULL;
     float operando1 = 0;
     float operando2 = 0;
+
+    // flag se ha calculo foi executado
+    int calc = 0;
+
+    int posicao_operando1 = 0;
 
     // variavel de destino
     atual_operando = get_elemento_lista (expressao, atual_operando);
     st_lista_circular *destino_resultado = atual_operando;
 
     while (atual_operador) {
+        // set calc flag
+        calc = 1;
+
         char *operador = (char *)atual_operador->dado;
         char *prox_operador = (char *)atual_operador->prox->dado;
 
+        if (atual_operando) {
+            // se operando1 nao for numero
+            if (atual_operando->type == STRING) {
+                operando1 = get_value (matriz1, atual_operando);          
+            }
+            else
+                operando1 = *(float *)atual_operando->dado;
 
-
-        // se operando1 nao for numero
-        if (atual_operando->type == STRING) {
-            operando1 = get_value (matriz1, atual_operando);          
+            // se operando2 nao for numero
+            if (atual_operando->prox->type == STRING) {
+                operando2 = get_value (matriz1, atual_operando->prox); 
+                //printf("operando2 %f\n", operando2);             
+            }
+            else{
+                operando2 = *(float *)atual_operando->prox->dado;
+                //printf("op2 %f\n", operando2);
+            }
         }
-        else
-            operando1 = *(float *)atual_operando->dado;
-
-
-        // se operando2 nao for numero
-        if (atual_operando->prox->type == STRING) {
-            operando2 = get_value (matriz1, atual_operando->prox); 
-            //printf("operando2 %f\n", operando2);             
-        }
-        else{
-            operando2 = *(float *)atual_operando->prox->dado;
-            printf("op2 %f\n", operando2);
-        }
-
-
-
 
         // ha mais operadores
         //if (atual_operador != atual_operador->prox) {
             // prioridade do operador atual eh maior do que o proximo
-            if (level (prox_operador) >= level (operador)) {
+            if ((atual_operador == atual_operador->prox) || (level (prox_operador) >= level (operador)) || (operador[0] == ')')  || (prox_operador[0] == ')')) {
 
+                // operacao
+                if (is_operation (operador[0])) {
+                    // Remove operando1
+                    atual_operando = get_elemento_lista (expressao, atual_operando);
+                    // Remove operando2
+                    atual_operando = get_elemento_lista (expressao, atual_operando);
+                    // aloca resultado
+                    result = (float*)malloc(sizeof(float));
+                }
 
-                // nao eh um numero
-               // if (!atof(dado))
-
-                // Remove operando1
-                //remover_operando = atual_operando;
-                //atual_operando = atual_operando->prox;
-                atual_operando = get_elemento_lista (expressao, atual_operando);
-                // Remove operando2
-                //remover_operando = atual_operando;
-                ///atual_operando = atual_operando->prox;
-                atual_operando = get_elemento_lista (expressao, atual_operando);
-
-                // aloca resultado
-                result = (float*)malloc(sizeof(float));
                 // calula
                 switch (operador[0]) {
                     case '(' :
-                        prim_operador = atual_operador;
+                        if (prox_operador[0] == ')') {
+                            // remove operador "("
+                            atual_operador = get_elemento_lista (operacao, atual_operador);     
+                            // remove operador ")"
+                            atual_operador = get_elemento_lista (operacao, atual_operador);     
+                        }
+                        else {
+                            atual_operador = atual_operador->prox;
+                        }
+                        // set calc flag to false
+                        calc = 0;
                         break;
 
                     case '+' :  
@@ -480,6 +517,7 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
 
                     case '*' :
                         *result = _mul (operando1, operando2);
+                        
                         break;
                     
                     case '/' :
@@ -489,21 +527,32 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
                     case '^' :
                         *result = _pow (operando1, operando2);
                         break;
+                    case ')' :
+                        posicao_operando1 = -1;
+                        atual_operador = goto_parent (atual_operador, &posicao_operando1);
+                        atual_operando =  voltar_operando (atual_operando, posicao_operando1);
+                        // set calc flag to false
+                        calc = 0;
+                        break;
 
                 }
-
-                // insere resultado na lista
-                insere_antes_lista(expressao, atual_operando, result, FLOAT);
-                // atualiza atual
-                //atual_operando = atual_operando->ant;
-
-                // remove operador
-                //remover_operador = atual_operador;
-                //atual_operador = atual_operador->prox;
-                atual_operador = get_elemento_lista (operacao, atual_operador);     
+                // se calculo foi executado
+                if (calc) {
+                    // insere resultado na lista
+                    insere_antes_lista (expressao, atual_operando, result, FLOAT);
+                    // remove operador
+                    atual_operador = get_elemento_lista (operacao, atual_operador);  
+                }
             }
-            else 
-                atual_operador = atual_operador->prox;
+            else {
+                //
+                if (operador[0] != '('){
+                    if (atual_operando)
+                        atual_operando = atual_operando->prox;
+                }
+                if (atual_operador)
+                    atual_operador = atual_operador->prox;
+            }
         //}
 
 
@@ -512,11 +561,12 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
 
     }
 
-        printf ("---------\n");
-        imprime_lista (operacao);
-        printf ("+++++++++\n");
-        imprime_lista (expressao);
 
+
+    printf ("---------\n");
+    imprime_lista (operacao);
+    printf ("+++++++++\n");
+    imprime_lista (expressao);
 
 
 
@@ -569,7 +619,7 @@ float *extrair_numero(char *string, int *ind_inicio_num, char sinal)
         *float_num *= -1;
     }
 
-    *ind_inicio_num = ind_fim_num;
+    *ind_inicio_num = ind_fim_num - 1;
     // retorna numero
     return float_num;
 }
