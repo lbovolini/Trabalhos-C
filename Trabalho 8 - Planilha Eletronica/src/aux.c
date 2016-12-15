@@ -70,10 +70,10 @@ void insere_lista(tipo_descritor_lista *descritor, void *dado, int type)
 
 
 // insere na lista
-void insere_antes_lista(tipo_descritor_lista *descritor, st_lista_circular *atual, void *dado, int type)
+st_lista_circular *insere_antes_lista(tipo_descritor_lista *descritor, st_lista_circular *atual, void *dado, int type)
 {
-    if(!descritor) return;
-    if(!dado) return;
+    if(!descritor) return NULL;
+    if(!dado) return NULL;
     //if(!atual) return;
 
     tipo_descritor_lista *percorrer = NULL;
@@ -91,7 +91,7 @@ void insere_antes_lista(tipo_descritor_lista *descritor, st_lista_circular *atua
         lista->ant = lista;
         lista->prox = lista;
         percorrer->n++;
-        return;
+        return lista;
     }
 
     // primeira
@@ -107,6 +107,8 @@ void insere_antes_lista(tipo_descritor_lista *descritor, st_lista_circular *atua
     atual->ant->prox = lista;
     lista->prox = atual;
     atual->ant = lista;
+
+    return lista;
 }
 
 
@@ -283,15 +285,15 @@ char *get_operando(char *linha, int *i)
 // 1 Higher
 int level (char *operador) {
 
-    if (operador[0] == '(')
-        return 1;
+    //if (operador[0] == '(')
+        //return 1;
     if (operador[0] == '^')
         return 2;
     if (operador[0] == '/' || operador[0] == '*')
         return 3;
     if (operador[0] == '-' || operador[0] == '+')
         return 4;
-    if (operador[0] == ')')
+    if (operador[0] == ')' || operador[0] == '(')
         return 5;
     return 0;
 }
@@ -407,7 +409,7 @@ st_lista_circular *voltar_operando (st_lista_circular *operando, int n) {
 
     if (!operando) return NULL;
 
-    if (n <= 0) return NULL;
+    if (n <= 0) return operando;
 
     st_lista_circular *op = operando;
 
@@ -417,6 +419,25 @@ st_lista_circular *voltar_operando (st_lista_circular *operando, int n) {
     }
 
     return op;
+}
+
+// verifica se alguma operacao pode ser realizada
+
+int is_operate (st_lista_circular **operador) {
+
+    if (!operador) return 0;
+
+    st_lista_circular **current = operador;
+
+    char *current_operador = (char *)(*current)->dado;
+    char *next_operador = (char *)(*current)->prox->dado;
+
+    if ((current_operador[0] != '(')  && (next_operador[0] == '(')) return 0; 
+    if ((current_operador[0] == ')')  || (next_operador[0] == ')')) return 1; // || (next_operador[0] != '(')
+    if ((*current == (*current)->prox) || (level (current_operador) <= level (next_operador))) return 1;
+
+
+    return 0;
 }
 
 
@@ -442,7 +463,7 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
     float operando2 = 0;
 
     // flag se ha calculo foi executado
-    int calc = 0;
+    int calc = 0, single;
 
     int posicao_operando1 = 0;
 
@@ -452,10 +473,15 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
 
     while (atual_operador) {
         // set calc flag
-        calc = 1;
+        calc = 1; single = 0;
 
         char *operador = (char *)atual_operador->dado;
         char *prox_operador = (char *)atual_operador->prox->dado;
+
+    printf ("---------\n");
+    imprime_lista (operacao);
+    printf ("+++++++++\n");
+    imprime_lista (expressao);
 
         if (atual_operando) {
             // se operando1 nao for numero
@@ -476,72 +502,100 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
             }
         }
 
-        // ha mais operadores
-        //if (atual_operador != atual_operador->prox) {
-            // prioridade do operador atual eh maior do que o proximo
-            if ((atual_operador == atual_operador->prox) || (level (prox_operador) >= level (operador)) || (operador[0] == ')')  || (prox_operador[0] == ')')) {
+        if (is_operate (&atual_operador)) {
+            // operacao
+            if (is_operation (operador[0])) {
 
-                // operacao
-                if (is_operation (operador[0])) {
+                if (((operador[0] == '(') && (prox_operador[0] == ')'))) {
+                    calc = 0;
+                }
+                else {
+                  //printf("[CCC %s]\n", (char*)atual_operador->dado);
+                
+                    //printf("OOOOOO\n");
+                       // printf("[FFFF %f]\n", *((float*)atual_operando->dado));
                     // Remove operando1
                     atual_operando = get_elemento_lista (expressao, atual_operando);
                     // Remove operando2
                     atual_operando = get_elemento_lista (expressao, atual_operando);
+
+                    // se ha somente um elemento na lista ele eh o primeiro
+                    if (expressao->prim == expressao->ult) {
+                        single = 1;
+                    }
+
                     // aloca resultado
                     result = (float*)malloc(sizeof(float));
                 }
+            }
 
-                // calula
-                switch (operador[0]) {
-                    case '(' :
-                        if (prox_operador[0] == ')') {
-                            // remove operador "("
-                            atual_operador = get_elemento_lista (operacao, atual_operador);     
-                            // remove operador ")"
-                            atual_operador = get_elemento_lista (operacao, atual_operador);     
-                        }
-                        else {
-                            atual_operador = atual_operador->prox;
-                        }
-                        // set calc flag to false
-                        calc = 0;
-                        break;
+            // calula
+            switch (operador[0]) {
+                case '(' :
+                    if (prox_operador[0] == ')') {
+                        // remove operador "("
+                        atual_operador = get_elemento_lista (operacao, atual_operador);     
+                        // remove operador ")"
+                        atual_operador = get_elemento_lista (operacao, atual_operador); 
+                    }
+                    else {
+                        atual_operador = atual_operador->prox;
+                    }
+                    // set calc flag to false
+                    calc = 0;
+                    break;
 
-                    case '+' :  
-                        *result = _add (operando1, operando2);
-                        break;
+                case '+' :  
+                    *result = _add (operando1, operando2);
+                    break;
 
-                    case '-' :
-                        *result = _sub (operando1, operando2);
-                        break;
+                case '-' :
+                    *result = _sub (operando1, operando2);
+                    break;
 
-                    case '*' :
-                        *result = _mul (operando1, operando2);
-                        
-                        break;
+                case '*' :
+                    *result = _mul (operando1, operando2);
                     
-                    case '/' :
-                        *result = _div (operando1, operando2);
-                        break;
+                    break;
+                
+                case '/' :
+                    *result = _div (operando1, operando2);
+                    break;
 
-                    case '^' :
-                        *result = _pow (operando1, operando2);
-                        break;
-                    case ')' :
-                        posicao_operando1 = -1;
-                        atual_operador = goto_parent (atual_operador, &posicao_operando1);
-                        atual_operando =  voltar_operando (atual_operando, posicao_operando1);
-                        // set calc flag to false
-                        calc = 0;
-                        break;
+                case '^' :
+                    *result = _pow (operando1, operando2);
+                    break;
+                case ')' :
+                    posicao_operando1 = -1;
+                    //printf("[AAAAAAAA %f]\n", *((float*)atual_operando->dado));
+                    //printf("[BBBBBBBB %s]\n", (char*)atual_operador->dado);
+                    atual_operador = goto_parent (atual_operador, &posicao_operando1);
+                    atual_operando =  voltar_operando (atual_operando, posicao_operando1);
+                    //printf("vv %d\n", posicao_operando1);
+                    //printf("[BBBBBBBB %s]\n", (char*)atual_operador->dado);
+
+                    //printf("[AAAAAAAA %f]\n", *((float*)atual_operando->dado));
+                    // set calc flag to false
+                    calc = 0;
+                    break;
 
                 }
                 // se calculo foi executado
                 if (calc) {
-                    // insere resultado na lista
-                    insere_antes_lista (expressao, atual_operando, result, FLOAT);
+                    
+                    //printf("##########\n");
+                    // se ha somente um elemento na lista ele eh o primeiro
+                    if (single) {
+                        insere_lista(expressao, result, FLOAT);
+                    }
+                    else {
+                        // insere resultado na lista
+                        atual_operando = insere_antes_lista (expressao, atual_operando, result, FLOAT);
+                    }
+                    //printf("##########\n");
                     // remove operador
                     atual_operador = get_elemento_lista (operacao, atual_operador);  
+                    //printf("##########\n");
                 }
             }
             else {
@@ -553,23 +607,13 @@ void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, ma
                 if (atual_operador)
                     atual_operador = atual_operador->prox;
             }
-        //}
-
-
-
-        
-
     }
-
 
 
     printf ("---------\n");
     imprime_lista (operacao);
     printf ("+++++++++\n");
     imprime_lista (expressao);
-
-
-
 
 
 
