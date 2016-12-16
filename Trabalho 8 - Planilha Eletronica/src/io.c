@@ -177,6 +177,13 @@ char *load_file_memory (char *file_name)
     return buffer_file;
 }
 
+int is_signal (char character) {
+
+    if (character == '+' || character == '-')
+        return 1
+    return 0;
+}
+
 // retorna true se for operador
 int is_operator(char character, int *parenteses) {
 
@@ -196,8 +203,14 @@ int is_operator(char character, int *parenteses) {
 
 
 // le arquivo com as operacoes
-void ler_operacoes (tipo_descritor_lista *expressao, tipo_descritor_lista *operacao)
+void ler_operacoes (tipo_descritor_lista *expressao)
 {
+    if (!expressao) {
+        printf ("Erro ler_operacoes()\n");
+        exit (EXIT_FAILURE);
+    }
+
+
     int i = 0, parenteses = 0;
 
     char *sign = NULL;
@@ -227,7 +240,7 @@ void ler_operacoes (tipo_descritor_lista *expressao, tipo_descritor_lista *opera
                 sign = (char *) malloc (sizeof (char) * 2);
                 sign[0] = buffer_file[i];
                 sign[1] = '\0';
-                insere_lista (operacao, sign, STRING);
+                insere_lista (expressao, sign, STRING);
             }
             // letra
             else if (isalpha (buffer_file[i])) {

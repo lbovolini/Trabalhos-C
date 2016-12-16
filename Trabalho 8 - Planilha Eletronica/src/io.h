@@ -22,7 +22,7 @@ int ler_arquivo(matriz_esparsa **matriz1, matriz_esparsa **matriz2);
 
 
 // le arquivo com as operacoes
-void ler_operacoes(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao);
+void ler_operacoes(tipo_descritor_lista *expressao);
 
 
 //
