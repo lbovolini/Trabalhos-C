@@ -516,8 +516,6 @@ int can_operate (st_lista_circular *element) {
 
     char current_operator = *(char *)current_element->dado;
     char next_operator = get_next_operator (current_element);
-    printf("op %c\n", current_operator);
-    printf("opn %c\n", next_operator);
 
     if ((current_operator != '(')  && (next_operator == '(')) return 0; 
     if ((current_operator == ')')  || (next_operator == ')')) return 1; // || (next_operador[0] != '(')
@@ -620,6 +618,10 @@ void calcula(tipo_descritor_lista *expressao, matriz_esparsa *matriz1)
                         first_operand = get_operand_value (matriz1, element->ant);
                         second_operand = get_operand_value (matriz1, element->prox);
 
+                        if (element == expressao->prim) {
+                            printf ("Erro calcula() no first operand\n");
+                            exit (EXIT_FAILURE);
+                        }
                         // remove first operand from list
                         element = get_elemento_lista (expressao, element->ant);
                         // remove opera from list
@@ -641,6 +643,50 @@ void calcula(tipo_descritor_lista *expressao, matriz_esparsa *matriz1)
                 switch (operator) {
                     case '(' :
                         if (get_next_operator (element) == ')') {
+                            if (element != expressao->prim) {
+                                if ((element->ant->type == OPERATOR) && (element->ant == expressao->prim)) {
+                                    //do
+
+                                    char op = get_operator (element->ant);
+                                    if ((op != '+') && (op != '-')) {
+                                        printf ("Error op\n");
+                                        exit (EXIT_FAILURE);
+                                    }
+
+                                    if (op == '+') {
+                                        // remove operator "+"
+                                        element = get_elemento_lista (expressao, element->ant);                                        
+                                    }
+                                    else if (op == '-') {
+                                        // negate operand
+                                        *((float*)element->prox->dado) = *((float*)element->prox->dado) * (-1);
+                                        // remove operator '-'
+                                        element = get_elemento_lista (expressao, element->ant);
+                                    }
+                                }
+                                else if ((element->ant->type == OPERATOR) && (element->ant != expressao->prim) && (element->ant->ant->type == OPERATOR)) {
+                                    //do
+
+                                    char op = get_operator (element->ant);
+                                    if ((op != '+') && (op != '-')) {
+                                        printf ("Error op\n");
+                                        exit (EXIT_FAILURE);
+                                    }
+
+                                    if (op == '+') {
+                                        // remove operator "+"
+                                        element = get_elemento_lista (expressao, element->ant);                                        
+                                    }
+                                    else if (op == '-') {
+                                        // negate operand
+                                        *((float*)element->prox->dado) = *((float*)element->prox->dado) * (-1);
+                                        // remove operator '-'
+                                        element = get_elemento_lista (expressao, element->ant);
+                                    }
+                                }
+                            }
+
+
                             // remove operator "("
                             element = get_elemento_lista (expressao, element);     
                             // remove operator ")"
