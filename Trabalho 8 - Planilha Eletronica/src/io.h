@@ -5,8 +5,9 @@
 #ifndef IO
 #define IO
 
-#define STRING 1
-#define FLOAT 2
+#define OPERAND  1
+#define OPERATOR 2
+#define VARIABLE 3
 
 #include "matriz.h"
 #include "funcoes.h"

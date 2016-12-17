@@ -16,21 +16,16 @@ int imprime_matriz(matriz_esparsa *mat)
         
     tipo_celula *percorrer = mat->prim_celula;
 
-    for(i = 1; i <= mat->i; i++)
-    {
-        for(j = 1; j <= mat->j; j++)
-        {
-            if(!percorrer)
-            {
+    for(i = 1; i <= mat->i; i++) {
+        for(j = 1; j <= mat->j; j++) {
+            if(!percorrer) {
                 printf("0\t");
             }
-            else if((percorrer->lin == i) && (percorrer->col == j))
-            {
+            else if((percorrer->lin == i) && (percorrer->col == j)) {
                 printf("%.2f\t", percorrer->val);
                 percorrer = percorrer->prox;
             }
-            else
-            {
+            else {
                 printf("0\t");
             }
         }
@@ -180,7 +175,7 @@ char *load_file_memory (char *file_name)
 int is_signal (char character) {
 
     if (character == '+' || character == '-')
-        return 1
+        return 1;
     return 0;
 }
 
@@ -228,29 +223,24 @@ void ler_operacoes (tipo_descritor_lista *expressao)
         // skip new lines
         while (buffer_file[i] == '\n') i++;
 
-       // insere_lista (expressao, get_operando (buffer_file, &i));
-       // i++;
-
-
         while (buffer_file[i] != '\n' && buffer_file[i])
         {
 
             // operador (
             if (is_operator (buffer_file[i], &parenteses))  {
-                sign = (char *) malloc (sizeof (char) * 2);
+                sign = (char *) malloc (sizeof (char));
                 sign[0] = buffer_file[i];
-                sign[1] = '\0';
-                insere_lista (expressao, sign, STRING);
+                insere_lista (expressao, sign, OPERATOR);
             }
             // letra
             else if (isalpha (buffer_file[i])) {
-                insere_lista (expressao, get_operando (buffer_file, &i), STRING);
+                insere_lista (expressao, get_operando (buffer_file, &i), VARIABLE);
             }
             // numero
             else if (isdigit (buffer_file[i])) {
                 //printf("BUFF %c\n", buffer_file[i]);
                 //printf("i == %d\n", i);
-                insere_lista (expressao, extrair_numero(buffer_file, &i, '+'), FLOAT);
+                insere_lista (expressao, extrair_numero(buffer_file, &i, '+'), OPERAND);
                 //printf("i == %d\n", i);
             }
             i++; 

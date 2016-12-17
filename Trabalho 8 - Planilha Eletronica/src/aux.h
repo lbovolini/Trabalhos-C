@@ -39,7 +39,7 @@ tipo_descritor_lista *cria_descritor_lista(void);
 
 
 // insere na lista
-void insere_lista(tipo_descritor_lista *descritor, void *dado, int type);
+st_lista_circular *insere_lista(tipo_descritor_lista *descritor, void *dado, int type);
 
 
 // insere na lista
@@ -70,7 +70,7 @@ float _div (float operando1, float operando2);
 float _pow (float operando1, float operando2);
 
 
-void calcula(tipo_descritor_lista *expressao, tipo_descritor_lista *operacao, matriz_esparsa *matriz1);
+void calcula(tipo_descritor_lista *expressao, matriz_esparsa *matriz1);
 
 
 // extrai numero de uma string
