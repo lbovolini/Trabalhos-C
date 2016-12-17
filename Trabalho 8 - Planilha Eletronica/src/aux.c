@@ -402,7 +402,6 @@ char get_operator (st_lista_circular *element) {
     }
 
     if (element->type != OPERATOR) {
-        //printf ("get_operator() type error\n");
         return '\0';
     }
 
