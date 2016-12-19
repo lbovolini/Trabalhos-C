@@ -196,6 +196,18 @@ int is_operator(char character, int *parenteses) {
     return 0;
 }
 
+// return true if is negative signal
+int is_negative_signal (char expression[], int i) {
+
+    if ((expression[i] == '-') && isdigit (expression[i+1])) {
+        return 1;
+    }
+    if ((expression[i] == '+') && isdigit (expression[i+1])) {
+        return -1;
+    }
+    return 0;
+}
+
 
 // le arquivo com as operacoes
 void ler_operacoes (tipo_descritor_lista *expressao)
@@ -207,8 +219,9 @@ void ler_operacoes (tipo_descritor_lista *expressao)
 
 
     int i = 0, parenteses = 0;
+    char operator_sign = '+';
 
-    char *sign = NULL;
+    char *operator = NULL;
 
     //tipo_descritor_lista *operacao = cria_descritor_lista();
 
@@ -228,9 +241,19 @@ void ler_operacoes (tipo_descritor_lista *expressao)
 
             // operador (
             if (is_operator (buffer_file[i], &parenteses))  {
-                sign = (char *) malloc (sizeof (char));
-                sign[0] = buffer_file[i];
-                insere_lista (expressao, sign, OPERATOR);
+                operator = (char *) malloc (sizeof (char));
+                operator[0] = buffer_file[i];
+
+                int negative = is_negative_signal (buffer_file, i);
+                if (negative == 0) {
+                    insere_lista (expressao, operator, OPERATOR);
+                }
+                else if (negative == 1) {
+                    operator_sign = '-';
+                }
+                // positive signal, do nothing
+                //else continue;
+                
             }
             // letra
             else if (isalpha (buffer_file[i])) {
@@ -238,10 +261,8 @@ void ler_operacoes (tipo_descritor_lista *expressao)
             }
             // numero
             else if (isdigit (buffer_file[i])) {
-                //printf("BUFF %c\n", buffer_file[i]);
-                //printf("i == %d\n", i);
-                insere_lista (expressao, extrair_numero(buffer_file, &i, '+'), OPERAND);
-                //printf("i == %d\n", i);
+                insere_lista (expressao, extrair_numero(buffer_file, &i, operator_sign), OPERAND);
+                operator_sign = '+';
             }
             i++; 
         }
