@@ -704,7 +704,7 @@ void calcula(tipo_descritor_lista *expressao, matriz_esparsa *matriz1)
                         *result = _pow (first_operand, second_operand);
                         break;
                     case ')' :
-                        // go to ')'
+                        // go to '('
                         element = goto_parent (element);
                         calc = 0;
                         break;
