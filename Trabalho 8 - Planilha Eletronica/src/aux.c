@@ -618,18 +618,6 @@ void calcula(tipo_descritor_lista *expressao, matriz_esparsa *matriz1)
         // set calc flag
         calc = 1; single = 0;
 
-    printf("++++++++++++++\n");
-    imprime_lista (expressao);
-    if (element->type == OPERAND) {
-        printf ("[## OPERAND %f]\n", *((float*)element->dado));
-    }
-    else if (element->type == OPERATOR) {
-        printf("[## OPERATOR %c]\n", *((char*)element->dado));
-    }
-    else if (element->type == VARIABLE) {
-        printf ("[## VARIABLE %s]\n", (char*)element->dado);
-    }
-
         // operador
         if (element_type (element) == OPERATOR) {
 
