@@ -558,6 +558,33 @@ float get_operand_value (matriz_esparsa *matriz1, st_lista_circular *element) {
 
 
 
+// Negate operand if preceded by minus sign and remove predecesor sign
+void negate_operand (tipo_descritor_lista **expressao, st_lista_circular **element) 
+{
+    if (!(*element)) {
+        printf ("Erro negative_operand()\n");
+        exit (EXIT_FAILURE);
+    }
+
+    char op = get_operator ((*element)->ant);
+    if ((op != '+') && (op != '-')) {
+        printf ("Error op\n");
+        exit (EXIT_FAILURE);
+    }
+
+    if (op == '+') {
+        // remove operator "+"
+        *element = get_elemento_lista (*expressao, (*element)->ant);
+    }
+    else if (op == '-') {
+        // negate operand
+        *((float*)(*element)->prox->dado) = *((float*)(*element)->prox->dado) * (-1);
+        // remove operator "-"
+        *element = get_elemento_lista (*expressao, (*element)->ant);
+    }
+}
+
+
 // !TODO > sem tempo
 void calcula(tipo_descritor_lista *expressao, matriz_esparsa *matriz1)
 {
@@ -645,44 +672,11 @@ void calcula(tipo_descritor_lista *expressao, matriz_esparsa *matriz1)
                         if (get_next_operator (element) == ')') {
                             if (element != expressao->prim) {
                                 if ((element->ant->type == OPERATOR) && (element->ant == expressao->prim)) {
-                                    //do
+                                    negate_operand (&expressao, &element); 
 
-                                    char op = get_operator (element->ant);
-                                    if ((op != '+') && (op != '-')) {
-                                        printf ("Error op\n");
-                                        exit (EXIT_FAILURE);
-                                    }
-
-                                    if (op == '+') {
-                                        // remove operator "+"
-                                        element = get_elemento_lista (expressao, element->ant);                                        
-                                    }
-                                    else if (op == '-') {
-                                        // negate operand
-                                        *((float*)element->prox->dado) = *((float*)element->prox->dado) * (-1);
-                                        // remove operator '-'
-                                        element = get_elemento_lista (expressao, element->ant);
-                                    }
                                 }
                                 else if ((element->ant->type == OPERATOR) && (element->ant != expressao->prim) && (element->ant->ant->type == OPERATOR)) {
-                                    //do
-
-                                    char op = get_operator (element->ant);
-                                    if ((op != '+') && (op != '-')) {
-                                        printf ("Error op\n");
-                                        exit (EXIT_FAILURE);
-                                    }
-
-                                    if (op == '+') {
-                                        // remove operator "+"
-                                        element = get_elemento_lista (expressao, element->ant);                                        
-                                    }
-                                    else if (op == '-') {
-                                        // negate operand
-                                        *((float*)element->prox->dado) = *((float*)element->prox->dado) * (-1);
-                                        // remove operator '-'
-                                        element = get_elemento_lista (expressao, element->ant);
-                                    }
+                                    negate_operand (&expressao, &element);
                                 }
                             }
 
