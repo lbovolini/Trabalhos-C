@@ -21,7 +21,7 @@ int main()
     //escrever_arquivo(matriz1, NULL, NULL, NULL);
 
 
-    //imprime_lista(lista);
+    // /imprime_lista(expressao);
     //printf("\n");
     calcula(expressao, matriz1);
     //printf("--------------\n");

@@ -205,9 +205,10 @@ void calcula (tipo_descritor_lista *expressao, matriz_esparsa *matriz1)
         }
         else
             element = element->prox;
+
     } 
 
-/*
+
     if (element->type != OPERAND) {
         printf ("Erro calculate()\n");
         exit (EXIT_FAILURE);
@@ -223,5 +224,5 @@ void calcula (tipo_descritor_lista *expressao, matriz_esparsa *matriz1)
             insere_ordenado (matriz1, get_line (var_resul), get_col (var_resul), *result);
         }
 
-    }*/
+    }
 }
