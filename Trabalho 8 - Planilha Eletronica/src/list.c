@@ -237,90 +237,32 @@ st_lista_circular *get_elemento_lista (tipo_descritor_lista *descritor, st_lista
 
 
 /*
- * Remove element from list
+ * Remove element from list and return data
  */
-void *get_elemento(tipo_descritor_lista *descritor, st_lista_circular **atual)
+void *get_element (tipo_descritor_lista *descritor, st_lista_circular **atual)
 {
     if(!descritor || !*atual) return NULL;
 
-    void *dado = NULL;
-    st_lista_circular *p = (*atual)->ant;
+    void *dado = (*atual)->dado;
 
-
-    if((*atual)->ant == *atual)
-    {
+    if((*atual)->ant == *atual) {
         descritor->prim = NULL;
         descritor->ult = NULL;
         descritor->n--;
-        dado = (*atual)->dado;
-        (*atual)->dado = NULL;
-        *atual = p;
-        //free(atual);
+        *atual = NULL;
 
         return dado;
     }
-    if(descritor->prim == *atual)
-    {
+    if(descritor->prim == *atual) {
         descritor->prim = (*atual)->prox;
     }
-    else if(descritor->ult == *atual)
-    {
+    else if(descritor->ult == *atual) {
         descritor->ult = (*atual)->ant;
     }
 
     (*atual)->prox->ant = (*atual)->ant;
     (*atual)->ant->prox = (*atual)->prox;
-
-    dado = (*atual)->dado;
-    (*atual)->dado = NULL;
     descritor->n--;
-    *atual = p;
-    //free(atual);
-
-    return dado;
-}
-
-
-/*
- * Remove element from list and return it
- */
-st_lista_circular *get_element (tipo_descritor_lista *descritor, st_lista_circular **atual)
-{
-    if(!descritor || !*atual) return NULL;
-
-    void *dado = NULL;
-    st_lista_circular *p = (*atual)->ant;
-
-
-    if((*atual)->ant == *atual)
-    {
-        descritor->prim = NULL;
-        descritor->ult = NULL;
-        descritor->n--;
-        dado = (*atual)->dado;
-        (*atual)->dado = NULL;
-        *atual = p;
-        //free(atual);
-
-        return dado;
-    }
-    if(descritor->prim == *atual)
-    {
-        descritor->prim = (*atual)->prox;
-    }
-    else if(descritor->ult == *atual)
-    {
-        descritor->ult = (*atual)->ant;
-    }
-
-    (*atual)->prox->ant = (*atual)->ant;
-    (*atual)->ant->prox = (*atual)->prox;
-
-    dado = (*atual)->dado;
-    (*atual)->dado = NULL;
-    descritor->n--;
-    *atual = p;
-    //free(atual);
 
     return dado;
 }

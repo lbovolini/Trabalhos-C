@@ -46,15 +46,9 @@ st_lista_circular *get_elemento_lista (tipo_descritor_lista *descritor, st_lista
 
 
 /*
- * Remove element from list
- */
-void *get_elemento(tipo_descritor_lista *descritor, st_lista_circular **atual);
-
-
-/*
  * Remove element from list and return it
  */
-st_lista_circular *get_element (tipo_descritor_lista *descritor, st_lista_circular **atual);
+void *get_element (tipo_descritor_lista *descritor, st_lista_circular **atual);
 
 
 #endif
