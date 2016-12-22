@@ -7,31 +7,7 @@
 #define MATRIZ
 
 
-#include <stdio.h>
-#include <stdlib.h>
-
-
-typedef struct st_celula
-{
-  struct st_celula *prox;
-
-  int   lin, 
-        col;
-
-  float val;
-
-} tipo_celula;
-
-
-typedef struct tipo_matriz_esparsa
-{
-  int i, 
-      j;
-
-  tipo_celula *prim_celula, 
-              *ult_celula;
-
-} matriz_esparsa;
+#include "structures.h"
 
 
 // aloca matriz_esparsa e retorna

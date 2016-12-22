@@ -5,14 +5,8 @@
 #ifndef IO
 #define IO
 
-#define OPERAND  1
-#define OPERATOR 2
-#define VARIABLE 3
-
-#include "matriz.h"
-#include "funcoes.h"
-#include "aux.h"
-
+#include <stdio.h>
+#include "structures.h"
 
 //
 int imprime_matriz(matriz_esparsa *mat);

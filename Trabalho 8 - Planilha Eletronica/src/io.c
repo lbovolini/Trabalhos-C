@@ -2,9 +2,13 @@
 * Funcoes de entrada e saida
 **/
 
-
+#include <stdio.h>
+#include <stdlib.h>
 #include "io.h"
-
+#include "list.h"
+#include "aux.h"
+#include "matriz.h"
+#include "funcoes.h"
 
 //
 int imprime_matriz(matriz_esparsa *mat)

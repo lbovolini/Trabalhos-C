@@ -1,4 +1,6 @@
+#include "list.h"
 #include "io.h"
+#include "calculate.h"
 
 
 int main()
@@ -24,6 +26,11 @@ int main()
     calcula(expressao, matriz1);
     //printf("--------------\n");
     //imprime_lista(lista);
+
+    printf("Matriz 1\n");
+    imprime_matriz(matriz1);
+
+    escrever_arquivo(matriz1, NULL, NULL, NULL);
 
     return 0;
 }

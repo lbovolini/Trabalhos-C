@@ -2,9 +2,10 @@
 * Funcoes da matriz
 **/
 
-
+#include <stdio.h>
+#include <stdlib.h>
 #include "matriz.h"
-
+#include "structures.h"
 
 // aloca matriz_esparsa e retorna
 matriz_esparsa *cria_matriz_esparsa(int i, int j)
